@@ -1,0 +1,12 @@
+{
+  "name": "portComm",
+  "displayName": "portComm",
+  "expo": {
+    "name": "portComm",
+    "slug": "portComm",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
