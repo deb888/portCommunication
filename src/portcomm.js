@@ -1,7 +1,7 @@
 <script src="http://192.168.0.200:8097"></script>
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-
+import { NativeModules,DeviceEventEmitter } from 'react-native'
 import SerialPortAPI from 'react-native-serial-port-api';
 
 class PortComm extends Component {
@@ -13,33 +13,44 @@ class PortComm extends Component {
 
     }
     async componentDidMount() {
-        SerialPortAPI.deviceNames((dt)=>{
-            console.log(dt);
-        })
+       
+        NativeModules.MyHeadsetLibModule.startTrackingAudioJackPlug()
+        DeviceEventEmitter.addListener('Got_Cha', (e)=> {
 
-        SerialPortAPI.devicePaths((dt) => {
-            console.log(dt);
-        });
+           console.log(e);
+           
+        
+        })
+        DeviceEventEmitter.addListener('BroadCast_Received', (e)=> {
+
+            console.log(e);
+            
+         
+         })
+
 
     }
     async  example() {
-        const serialPort = await SerialPortAPI.open("/dev/ttyS3", { baudRate: 38400 });
+        // const serialPort = await SerialPortAPI.open("/dev/ttyS3", { baudRate: 38400 });
 
-        // subscribe received data
-        const sub = serialPort.onReceived(buff => {
+        // // subscribe received data
+        // const sub = serialPort.onReceived(buff => {
 
 
-            console.log(buff.toString('hex').toUpperCase());
-        })
+        //     console.log(buff.toString('hex').toUpperCase());
+        // })
 
-        // unsubscribe
-        // sub.remove();
+        // // unsubscribe
+        // // sub.remove();
 
-        // send data with hex format
-        await serialPort.send('00FF');
+        // // send data with hex format
+        // await serialPort.send('00FF');
 
-        // close
-        serlialPort.close();
+        // // close
+        // serlialPort.close();
+        NativeModules.MyHeadsetLibModule.someMethod()
+
+
     }
     componentWillUnmount() {
         this.sub ? this.sub.remove() : null;

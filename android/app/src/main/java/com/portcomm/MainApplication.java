@@ -28,6 +28,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
+import com.portcomm.MyHeadsetLibPackager;
+import com.portcomm.RNAndroidBroadcastReceiverEventReminderPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
@@ -44,6 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+      packages.add(new MyHeadsetLibPackager());
+      packages.add(new RNAndroidBroadcastReceiverEventReminderPackage());
       return packages;
     }
 
