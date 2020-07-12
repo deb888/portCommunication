@@ -1,12 +1,13 @@
 <script src="http://192.168.0.200:8097"></script>
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity ,ToastAndroid} from 'react-native';
 import { NativeModules,DeviceEventEmitter } from 'react-native'
 import SerialPortAPI from 'react-native-serial-port-api';
 
 class PortComm extends Component {
     sub;
     serialPort;
+    testinterval;
     constructor(props) {
         super(props);
 
@@ -17,20 +18,28 @@ class PortComm extends Component {
         NativeModules.MyHeadsetLibModule.startTrackingAudioJackPlug()
         DeviceEventEmitter.addListener('Got_Cha', (e)=> {
 
-           console.log(e);
+            ToastAndroid.showWithGravity(
+                "Data Test Found    "+e,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+              );
            
         
         })
         DeviceEventEmitter.addListener('BroadCast_Received', (e)=> {
 
-            console.log(e);
+            ToastAndroid.showWithGravity(
+                "temp found    "+e,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+              );
             
          
          })
 
 
     }
-    async  example() {
+      example() {
         // const serialPort = await SerialPortAPI.open("/dev/ttyS3", { baudRate: 38400 });
 
         // // subscribe received data
@@ -48,9 +57,20 @@ class PortComm extends Component {
 
         // // close
         // serlialPort.close();
-        NativeModules.MyHeadsetLibModule.someMethod()
+        this.testinterval=  setInterval(()=>{
+            NativeModules.MyHeadsetLibModule.TestIntent();
+            
+        },1500)
+       
 
 
+    }
+     getBodyTemp(){
+         clearInterval(this.testinterval);
+        setInterval(()=>{
+            NativeModules.MyHeadsetLibModule.someMethod();
+            
+        },1500)
     }
     componentWillUnmount() {
         this.sub ? this.sub.remove() : null;
@@ -62,9 +82,15 @@ class PortComm extends Component {
                 <Text>Open up {JSON.stringify(SerialPortAPI)}</Text>
                 <TouchableOpacity
                     style={styles.button}
+                    onPress={() => this.getBodyTemp()}
+                >
+                    <Text style={styles.buttonText}>BodyTemp</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
                     onPress={() => this.example()}
                 >
-                    <Text style={styles.buttonText}>Send</Text>
+                    <Text style={styles.buttonText}>Test Working</Text>
                 </TouchableOpacity>
             </View>
         )

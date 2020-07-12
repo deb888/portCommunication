@@ -67,6 +67,14 @@ public class MyHeadsetLibModule extends ReactContextBaseJavaModule implements Li
     @ReactMethod
     public void someMethod() {
 
+        Intent mintent = new Intent();
+		mintent.setAction("marvel.intent.action.external.omcexc");
+		mintent.putExtra("names","GetBodyTemp");
+		mContext.sendBroadcast(mintent);
+
+    }
+    @ReactMethod
+    public void TestIntent(){
         Intent intent = new Intent("com.journaldev.broadcastreceiver.SOME_ACTION");
         mContext.sendBroadcast(intent);
     }

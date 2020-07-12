@@ -14,6 +14,10 @@ import expo.modules.splashscreen.SplashScreenImageResizeMode;
 public class MainActivity extends ReactActivity {
     ConnectionReceiver receiver;
     IntentFilter intentFilter;
+    IntentFilter filterRefresh;
+    IntentFilter filterUpdate;
+    IntentFilter testIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +27,14 @@ public class MainActivity extends ReactActivity {
         // discouraged to modify it manually
         SplashScreen.show(this, SplashScreenImageResizeMode.CONTAIN, ReactRootView.class);
         receiver = new ConnectionReceiver();
-        intentFilter = new IntentFilter("com.journaldev.broadcastreceiver.SOME_ACTION");
+        filterRefresh = new IntentFilter("marvel.intent.action.external.omcexc");
+        filterUpdate = new IntentFilter("marvel.intent.action.external.execute");
+        testIntent = new IntentFilter("com.journaldev.broadcastreceiver.SOME_ACTION");
+
+        registerReceiver(receiver, filterRefresh);
+        registerReceiver(receiver, filterUpdate);
+        registerReceiver(receiver, testIntent);
+
     }
 
     /**
@@ -38,7 +49,10 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(receiver, intentFilter);
+        registerReceiver(receiver, filterRefresh);
+        registerReceiver(receiver, filterUpdate);
+        registerReceiver(receiver, testIntent);
+
 
     }
 

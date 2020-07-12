@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
+import android.os.Bundle;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -30,33 +31,30 @@ public class ConnectionReceiver extends BroadcastReceiver {
             Toast.makeText(context, "SOME_ACTION is received", Toast.LENGTH_LONG).show();
             String message = "SOME_ACTION is received";
             sendEvent("BroadCast_Received", message);
-
-        } else {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-            if (isConnected) {
-                try {
-                    Toast.makeText(context, "Network is connected", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+        }
+        String action = intent.getAction();
+        if (action.equals("marvel.intent.action.external.execute")) {
+            Bundle bundle = intent.getExtras();
+            Object objn1 = bundle.get("names");
+            Object objd1 = bundle.get("datas");
+            if (objn1 != null && objd1 != null) {
+                String names1 = objn1.toString();
+                String datas1 = objd1.toString();
+                if (names1.equals("BodyTemp")) {
+                    sendEvent("BroadCast_Received", datas1);
                 }
-            } else {
-                Toast.makeText(context, "Network is changed or reconnected", Toast.LENGTH_LONG).show();
             }
         }
+
     }
 
     private void sendEvent(String eventName, String eventId) {
-        try{
+        try {
             ReactContext reactContext = RNAndroidBroadcastReceiverEventReminderModule.reactContext;
 
-            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(eventName, eventId);
-        }
-        catch(Exception e){
-            Log.d("ReactNativeJS","Exception in sendEvent in EventReminderBroadcastReceiver is:"+e.toString());
+            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, eventId);
+        } catch (Exception e) {
+            Log.d("ReactNativeJS", "Exception in sendEvent in EventReminderBroadcastReceiver is:" + e.toString());
         }
 
     }
