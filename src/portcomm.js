@@ -1,9 +1,6 @@
-<script src="http://192.168.0.200:8097"></script>
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity ,ToastAndroid} from 'react-native';
 import { NativeModules,DeviceEventEmitter } from 'react-native'
-import SerialPortAPI from 'react-native-serial-port-api';
-
 class PortComm extends Component {
     sub;
     serialPort;
